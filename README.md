@@ -1,4 +1,4 @@
-# Random Probing Properties Verification Tool
+# VRAPS : Verifier of Random Probing Security
 
 This tool is designed to verify the different properties from our paper including :
 
