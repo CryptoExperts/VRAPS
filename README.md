@@ -1,7 +1,3 @@
-### REMARQUE 
-
-__Ce readme est pour l'outil dans le dossier Abdel_optimized. Cette organisation est temporaire et sera modifiée pour la soumission.__
-
 # Random Probing Properties Verification Tool
 
 This tool is designed to verify the different properties from our paper including :
