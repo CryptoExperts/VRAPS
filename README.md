@@ -7,9 +7,7 @@ This tool is designed to verify the different properties from our paper includin
 * Random Probing (RP)
 * ($t, p, \epsilon$)-Random Probing Composability (RPC)
 * ($t, f$)-Random Probing Expandability (RPE)
-```htm
-&epsilon;
-```
+h<sub>&theta;</sub>
 
 The tool runs on Sage and needs functionalities from Python 3 or higher.
 
