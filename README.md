@@ -1,18 +1,36 @@
-# VRAPS : Verifier of Random Probing Security
+# VRAPS: (V)erifier of (RA)ndom (P)robing (S)ecurity
 
-This tool is designed to verify the different properties from our paper including :
+VRAPS is a formal verification tool for the random probing security of masked implementations, as well as for the probing security. The verified properties are :
 
-- $t$-Probing Security (P)
+- t-Probing Security (P)
 
-* Random Probing (RP)
-* ($t, p, \epsilon$)-Random Probing Composability (RPC)
-* ($t, f$)-Random Probing Expandability (RPE)
+* (p, &epsilon;)-Random Probing (RP)
+* (t, p, &epsilon;)-Random Probing Composability (RPC)
+* (t, f)-Random Probing Expandability (RPE)
 
-The tool runs on Sage and needs functionalities from Python 3 or higher.
+VRAPS was introduced in the following publication :
+
+> [Random Probing Security: Verification, Composition, Expansion and New Constructions](https://eprint.iacr.org/)  
+> By Sonia Belaïd, Jean-Sébastien Coron, Emmanuel Prouff, Matthieu Rivain and Abdul Rahman Taleb 
+> In the proceedings of CRYPTO 2020.
+
+## Content
+
+This repository contains the code of __VRAPS__ implemented in SageMath and Python3:
+
+- **verif_tool.sage:** contains the main program that runs the tool.
+- **read_gadget.py:** contains the function that reads a gadget in an input file with the correct format, and outputs information needed for the tool to apply verification rules, converting variables and expressions in numpy arrays format (when the tool reads a gadget, it outputs three temporary files **sage_tmp1.sage**, **sage_tmp2.sage** and **sage_tmp2_exps.sage**).
+- **verification_rules.py:** contains the simplification rules (1, 2, 3 and 4), and the function that loops over all these rules and applies them to given tuples.
+- **probing_func.py:** contains the verification function for P property. 
+- **random_probing_func.py:** contains the verification function for RP property. 
+- **random_probing_exp1_func.py:** contains the verification function for RPE1 property (First part of RPE property). 
+- **random_probing_exp2_func.py:** contains the verification function for RPE2 property (Second part of RPE property). 
+- **random_probing_exp_copy_func.py:** in case of an RPE verification for copy gadgets, there are 4 functions that are computed. This file contains the function that computes f<sup>12</sup> and f<sup>21</sup> (f<sup>1</sup> and f<sup>2</sup> are respectively computed using **random_probing_exp1_func.py** and **random_probing_exp2_func.py**).
+- **random_probing_comp_func.py:** contains the verification function for RPC property.
 
 ## Usage
 
-The main function of the tool is in the file `verif_tool.sage`. To get all options, run the following command:
+Using the tool requires having [SageMath](http://www.sagemath.org/) installed and Python (3 or higher). The main function of the tool is in the file `verif_tool.sage`. To get all options, run the following command:
 
 ```
 sage verif_tool.sage -h
@@ -45,13 +63,13 @@ optional arguments:
 
 The parameter `t` is only necessary for the properties RPC, RPE, RPE1 and RPE2. When `t_output` is specified, the value of `t` is taken for input shares and the value of `t_output` for output shares. Otherwise, `t` is used for input shares and output shares.
 
-The parameter `coeff_max` specifies the maximum size of tuples to test during the verification (which is also the maximum coefficient in the evaluation of $\epsilon$ which will be computed exactly). This parameter is not needed for probing verification .
+The parameter `coeff_max` specifies the maximum size of tuples to test during the verification (which is also the maximum coefficient in the evaluation of &epsilon; which will be computed exactly). This parameter is not needed for probing verification .
 
 The argument `-v` lets the user specify the amount of output he desires to follow the pace of the execution. The default value `-v 0` means that only the final output will be displayed. The value `-v 1` will output current size of tuples tested and iteration numbers. While the value `-v 2` will output all of the above, as well as every rule that is applied and the number of tuples that are being eliminated after each iteration.
 
 #### Execution Examples
 
-- The following command executes P verification on the gadget `gadget.sage`, checking if it is $2$-Probing secure:
+- The following command executes P verification on the gadget `gadget.sage`, checking if it is 2​-Probing secure:
 
   ```
   sage verif_tool.sage gadget.sage P -t 2
@@ -69,7 +87,7 @@ The argument `-v` lets the user specify the amount of output he desires to follo
   sage verif_tool.sage gadget.sage RPE -c 5 -t 1 -v 0
   ```
 
-  If $t\_in = 2$ and $t\_out = 1$ :
+  If t<sub>in</sub> = 2​ and t<sub>out</sub> = 1​ :
 
   ```
   sage verif_tool.sage gadget.sage RPE -c 5 -t 2 -t_output 1 -v 1
@@ -106,7 +124,7 @@ tmp = a1 * b0
 d1 = c1 + tmp
 ```
 
-Above is an example of the $ISW$ multiplication gadget with 2 shares. 
+Above is an example of the ISW​ multiplication gadget with 2 shares. 
 
 * `#ORDER 1`  is the order of the gadget (1-Probing Secure)
 * `#SHARES 2` is the number of shares used in the gadget
@@ -114,7 +132,7 @@ Above is an example of the $ISW$ multiplication gadget with 2 shares.
 * `#RANDOMS r0` are all of the random variables used in the gadget
 * `#OUT d` is the output variable of the gadget
 
-The next lines are the instructions (or gates) of the gadget. Allowed operations are `+` and `*`. The shares of input/output variables range from $0$ to $\#shares - 1$ . To specify the share for each variable, simply use the variable name suffixed by the share number `(eg. a0, b1, d0, ...)​`.  Input variables should be one letter variables in an alphabetical order starting from `a` (`a, b, c, ...`). Output variables should also be one letter variables.
+The next lines are the instructions (or gates) of the gadget. Allowed operations are `+` and `*`. The shares of input/output variables range from 0 to \#shares - 1 . To specify the share for each variable, simply use the variable name suffixed by the share number `(eg. a0, b1, d0, ...)​`.  Input variables should be one letter variables in an alphabetical order starting from `a` (`a, b, c, ...`). Output variables should also be one letter variables.
 
 __The variable names of the format `r#_` where `#` is a number `(eg. r0_, r15_, ...)`, are reserved formats for the tool processing and should not be used in the gadget description.__
 
@@ -124,7 +142,7 @@ __The variable names of the format `r#_` where `#` is a number `(eg. r0_, r15_, 
 
 ### Output of P Verification
 
-For probing security verification, the tool simply outputs if for the considered value of $t$, whether the gadget is or is not $t$-Probing secure.
+For probing security verification, the tool simply outputs if for the considered value of t, whether the gadget is or is not t-Probing secure.
 
 ### Output of RP Verification
 
@@ -153,7 +171,7 @@ Complexity (Nadd, Ncopy, Nmult, Nrand) = (12, 15, 9, 3)
 
 ```
 
-Above is an output example of RP verification for the $ISW$ 3-share multiplication gadget, with default verbosity `-v 0` and `Coeff_max = 4`.  The tool starts by outputting the description of the gadget :
+Above is an output example of RP verification for the ISW​ 3-share multiplication gadget, with default verbosity `-v 0` and `Coeff_max = 4`.  The tool starts by outputting the description of the gadget :
 
 ```
 Gadget with 2 input(s),  1 output(s),  3 share(s)
@@ -162,7 +180,7 @@ Total number of output variables : 1
 Total number of Wires : 57
 ```
 
-and then outputs the coefficients for the function $f(p)$ computed by the tool (See paper for details on the function $f$). These coefficients are a lower bound on the function (`Coefficients fmin(p)`). The tool also outputs an upper bound on $f(p)$ (`Coefficients fmax(p)`) by replacing each $c_i > \text{Coeff_max}$ by $\binom{s}{i}$ where $s$ is the total number of wires in the gadget (see paper for more details).
+and then outputs the coefficients for the function f(p) computed by the tool (See paper for details on the function f). These coefficients are a lower bound on the function (`Coefficients fmin(p)`). The tool also outputs an upper bound on f(p) (`Coefficients fmax(p)`) by replacing each c<sub>i</sub> > Coeff_max by <img src="https://latex.codecogs.com/svg.latex?\small\binom{s}{i}"/>where s is the total number of wires in the gadget (check the paper for more details).
 
 The tool also outputs the total verification time as well as the gadget's complexity in terms of number of addition, copy, multiplication and randomness gates needed.
 
@@ -208,7 +226,7 @@ Log2 of Upper Bound on p : pmax = -infinity , Log2 fmin(pmax) = -infinity
 
 ```
 
-Above is an output example of RPE verification for the $ISW$ 2-share multiplication gadget, with default verbosity `-v 0` and `-t 1`.  The tool starts by outputting the description of the gadget :
+Above is an output example of RPE verification for the ISW​ 2-share multiplication gadget, with default verbosity `-v 0` and `-t 1`.  The tool starts by outputting the description of the gadget :
 
 ```
 Gadget with 2 input(s),  1 output(s),  2 share(s)
@@ -217,7 +235,7 @@ Total number of output variables : 1
 Total number of Wires : 21
 ```
 
-and ends by outputting the functions $f^1, f^2, f^{12}$ computed by the tool with the value `Coeff_max = 4`. The first three lines
+and ends by outputting the functions f<sup>1</sup>, f<sup>2</sup>, f<sup>12</sup>​ computed by the tool with the value `Coeff_max = 4`. The first three lines
 
 ```
 Coefficients Prop_EXP fmin_I1(p) = [0.0, 4.0, 105.0, 975.0, 5220.0, 10548.0, 12048.0, 8874.0, 4488.0, 1583.0, 385.0, 60.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -225,7 +243,7 @@ Coefficients Prop_EXP fmin_I2(p) = [0.0, 4.0, 104.0, 965.0, 5175.0, 10482.0, 120
 Coefficients Prop_EXP fmin_I1_and_I2(p) = [0.0, 4.0, 78.0, 767.0, 4585.0, 9554.0, 11117.0, 8321.0, 4279.0, 1536.0, 380.0, 60.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ```
 
-are respectively the coefficients computed for $f^1, f^2$ and $f^{12}$, which provide a lower bound on these functions since all coefficients $c_i > \text{Coeff_max}$ are not exactly computed. An upper bound on these functions are given in the next three lines 
+are respectively the coefficients computed for f<sup>1</sup>, f<sup>2</sup> and f<sup>12</sup>, which provide a lower bound on these functions since all coefficients c<sub>i</sub> > Coeff_max are not exactly computed. An upper bound on these functions are given in the next three lines 
 
 ```
 Coefficients Prop_EXP fmax_I1(p) = [0.0, 4.0, 105.0, 975.0, 5220.0, 20349, 54264, 116280, 203490, 293930, 352716, 352716, 293930, 203490, 116280, 54264, 20349, 5985, 1330, 210, 21, 1]
@@ -233,16 +251,16 @@ Coefficients Prop_EXP fmax_I2(p) = [0.0, 4.0, 104.0, 965.0, 5175.0, 20349, 54264
 Coefficients Prop_EXP fmax_I1_and_I2(p) = [0.0, 4.0, 78.0, 767.0, 4585.0, 20349, 54264, 116280, 203490, 293930, 352716, 352716, 293930, 203490, 116280, 54264, 20349, 5985, 1330, 210, 21, 1]
 ```
 
-where each $c_i > \text{Coeff_max}$ is replaced by $\binom{s}{i}$ where $s$ is the total number of wires in the gadget (see paper for more details).
+where each c<sub>i</sub> > Coeff_max is replaced by <img src="https://latex.codecogs.com/svg.latex?\small\binom{s}{i}"/> where s is the total number of wires in the gadget (check the paper for more details).
 
-The tool also outputs the total verification time, the complexity of the gadget in number of gates for each operation (add, copy, multiplication, random), the amplification order $d$ and the corresponding coefficient $c_d$, and finally outputs lower and upper bounds on the tolerated leakage probability :
+The tool also outputs the total verification time, the complexity of the gadget in number of gates for each operation (add, copy, multiplication, random), the amplification order d and the corresponding coefficient c<sub>d</sub>​, and finally outputs lower and upper bounds on the tolerated leakage probability :
 
 ```
 Log2 of Lower Bound on p : pmin = -infinity , Log2 fmax(pmin) = -infinity
 Log2 of Upper Bound on p : pmax = -infinity , Log2 fmin(pmax) = -infinity
 ```
 
-When the amplification order $d \leq 1$, the tolerated probaibility is equal to $0$, which is why the output $\log_2$ value is `-infinity`. 
+When the amplification order d &leq; 1​, the tolerated probability is equal to 0, which is why the output log<sub>2</sub> value is `-infinity`. 
 
 To output all of the intermediate functions coefficients, the argument `-v 1` or `-v 2` should be specified.
 
@@ -285,13 +303,13 @@ Log2 of Upper Bound on p : pmax = -infinity , Log2 fmin(pmax) = -infinity
 
 ```
 
-Above is an output example of RPE verification for the $ISW$ 2-share multiplication gadget, with default verbosity `-v 0` and `-t 1`.  The tool gives almost the same output information as for the RPE verification, except for the upper and lower bounds on the coefficients. In the case of RPC verification, there is only one function $f$ instead of $f^1, f^2, f^{12}$ for RPE, and the tool outputs the computed coefficients for $f$ with the corresponding value for `Coeff_max` :
+Above is an output example of RPE verification for the ISW 2-share multiplication gadget, with default verbosity `-v 0` and `-t 1`.  The tool gives almost the same output information as for the RPE verification, except for the upper and lower bounds on the coefficients. In the case of RPC verification, there is only one function f instead of f<sup>1</sup>, f<sup>2</sup>, f<sup>12</sup> for RPE, and the tool outputs the computed coefficients for f​ with the corresponding value for `Coeff_max` :
 
 ```
 Coefficients Prop_COMP fmin(p) = [0.0, 4.0, 131.0, 1173.0, 5810.0, 11476.0, 12931.0, 9409.0, 4694.0, 1630.0, 390.0, 60.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ```
 
-and outputs an upper bound on $f$ by replacing each each $c_i > \text{Coeff_max}$ is replaced by $\binom{s}{i}$ where $s$ is the total number of wires in the gadget (see paper for more details) :
+and outputs an upper bound on f by replacing each each c<sub>i</sub> > Coeff_max is replaced by <img src="https://latex.codecogs.com/svg.latex?\small\binom{s}{i}"/> where s is the total number of wires in the gadget (check the paper for more details) :
 
 ```
 Coefficients Prop_COMP fmax(p) = [0.0, 4.0, 131.0, 1173.0, 5810.0, 20349, 54264, 116280, 203490, 293930, 352716, 352716, 293930, 203490, 116280, 54264, 20349, 5985, 1330, 210, 21, 1]
@@ -363,29 +381,16 @@ Log2 of Upper Bound on p : pmax = -5.34894830882107 , Log2 fmin(pmax) = -5.35064
 
 ```
 
-In particular, RPE verification for copy gadget gives a function $f$ where:
-$$
-f = max(f^{12}, f^{21}, f^{1}, f^{2})
-$$
+In particular, RPE verification for copy gadget gives a function f​ where :
+
+​																				f = max(f<sup>12</sup>, f<sup>21</sup>, f<sup>1</sup>, f<sup>2</sup>)
+
 See paper for more details.
 
-The tool outputs the lower and upper bounds on $f$ using the same procedure as for the other outputs. To output all of the functions coefficients, the argument `-v 1` or `-v 2` should be specified.
-
-
-
-## Project Files Description
-
-The tool's project contains each of the following files :
-
-- **verif_tool.sage:** contains the main program that runs the tool.
-- **read_gadget.py:** contains the function that reads a gadget in an input file with the correct format, and outputs information needed for the tool to apply verification rules, converting variables and expressions in numpy arrays format (when the tool reads a gadget, it outputs three temporary files **sage_tmp1.sage**, **sage_tmp2.sage** and **sage_tmp2_exps.sage**).
-- **verification_rules.py:** contains rules 1, 2, 3 and 4, and the function that loops over all these rules and applies them to given tuples.
-- **probing_func.py:** contains the verification function for P property. 
-- **random_probing_func.py:** contains the verification function for RP property. 
-- **random_probing_exp1_func.py:** contains the verification function for RPE1 property (First part of RPE property). 
-- **random_probing_exp2_func.py:** contains the verification function for RPE2 property (Second part of RPE property). 
-- **random_probing_exp_copy_func.py:** in case of an RPE verification for copy gadgets, there are 4 functions that are computed. This file contains the function that computes $f^{12}$ and $f^{21}$ ($f^1$ and $f^2$ are respectively computed using **random_probing_exp1_func.py** and **random_probing_exp2_func.py**).
-- **random_probing_comp_func.py:** contains the verification function for RPC property.
+The tool outputs the lower and upper bounds on f​ using the same procedure as for the other outputs. To output all of the functions coefficients, the argument `-v 1` or `-v 2` should be specified.
 
 There are 2 versions of each of the properties' verification functions : one version with batching (i.e it processes the tuples through the simplification rules in batches instead of all at once, for memory and speed issues), and a second version that processes the tuples without batching. The batch size for the first version is experimentally fixed at a maximum of 100000 tuples per batch. This value can be modified at any time by modifying the global variable `BATCH_SIZE` in the main file `verif_tool.sage`.
 
+## License
+
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
