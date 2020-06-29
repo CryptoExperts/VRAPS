@@ -1,3 +1,35 @@
+# coding=utf-8
+###############################################################################
+#
+# Implementation of VRAPS (Verifier for Random Probing Security) in SageMath
+#
+# VRAPS is a formal verification tool for random probing security and random 
+# probing expandability (RPE) that was introduced in the following publication:
+# 
+#    "Random Probing Security: Verification, Composition, Expansion and New 
+#    Constructions"
+#    By Sonia Belaïd, Jean-Sébastien Coron, Emmanuel Prouff, Matthieu Rivain, 
+#    and Abdul Rahman Taleb
+#    In the proceedings of CRYPTO 2020.
+#
+# Copyright (C) 2020 CryptoExperts
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+###############################################################################
+
+
 # **************************************************
 #	Verification of random probing Composability
 # **************************************************

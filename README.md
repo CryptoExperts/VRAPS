@@ -10,7 +10,7 @@ VRAPS is a formal verification tool for the random probing security of masked im
 
 VRAPS was introduced in the following publication :
 
-> [Random Probing Security: Verification, Composition, Expansion and New Constructions](https://eprint.iacr.org/)  
+> [Random Probing Security: Verification, Composition, Expansion and New Constructions](https://eprint.iacr.org/2020/786)  
 > By Sonia Belaïd, Jean-Sébastien Coron, Emmanuel Prouff, Matthieu Rivain and Abdul Rahman Taleb 
 > In the proceedings of CRYPTO 2020.
 
@@ -99,7 +99,13 @@ The argument `-v` lets the user specify the amount of output he desires to follo
   sage verif_tool.sage gadget.sage RPC -c 5 -t 2 -v 2
   ```
 
+### Notes
 
+* The verification functions for all of the properties process the tuples through the simplification rules in batches instead of all at once, for memory and speed issues. The batch size is experimentally fixed at a maximum of 200000 tuples per batch. This value can be modified at any time by modifying the global variable `BATCH_SIZE` in the main file `verif_tool.sage`.
+
+* In the file __verification_rules.py__, there is a hamming weight lookup table, of default size 2048. This size means that the number of shares for any gadget is at most log<sub>2</sub>(2048) = 11 shares. If gadgets of higher number of shares are to be used with the program, the size of this table should be increased. Namely, for n-share gadgets, the table should be of size at least 2<sup>n</sup>. We consider the approach of the lookup table of size 2<sup>n</sup> since we use the tool to verify the security of relatively small gadgets, which makes the lookup table of reasonable size.
+
+  # changed to 2^n
 
 ## Input Format
 
@@ -388,8 +394,6 @@ In particular, RPE verification for copy gadget gives a function f​ where :
 See paper for more details.
 
 The tool outputs the lower and upper bounds on f​ using the same procedure as for the other outputs. To output all of the functions coefficients, the argument `-v 1` or `-v 2` should be specified.
-
-There are 2 versions of each of the properties' verification functions : one version with batching (i.e it processes the tuples through the simplification rules in batches instead of all at once, for memory and speed issues), and a second version that processes the tuples without batching. The batch size for the first version is experimentally fixed at a maximum of 100000 tuples per batch. This value can be modified at any time by modifying the global variable `BATCH_SIZE` in the main file `verif_tool.sage`.
 
 ## License
 

@@ -40,8 +40,8 @@ import numpy as np
 #
 #	OUTPUT:
 #		- rewritten pseudo-code such that each instruction output is unique
-#			and random variables names end with '_', along with the
-#             numpy arrays representing the wires and variables
+#			and random variables names end with '_', along with the 
+#             list of descriptions for each variable
 #
 ##############################################################################
 
@@ -182,8 +182,18 @@ def compute_input_file(circuit_file):
     return generate_list_inv_var_from_file()
     
 
+##############################################################################
+#
+# generate_list_inv_var_from_file
+#
+#	OUTPUT:
+#		- returns the list of descriptions for each variable
+#       Each variable is represented as [name_of_variable, 
+#       algebraic_expression, secret_dependencies, random_dependencies,
+#       nb_occurrences, binary_repr, nb_variables]
+#
+##############################################################################
 def generate_list_inv_var_from_file():
-    #Each wire is represented as [name_of_variable, algebraic_expression, secret_dependencies, random_dependencies, nb_occurrences, binary_repr, nb_variables]
     # load file
     load("sage_tmp2.sage")
     load("sage_tmp1.sage")

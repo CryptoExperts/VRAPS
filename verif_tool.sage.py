@@ -160,7 +160,8 @@ def main():
     (order,nb_shares,list_int_var,list_out_var, complexity) = compute_input_file(args.File)
     write_exps_file(list_int_var, list_out_var)
     
-    print(str(list_int_var))
+    #print(str(list_int_var))
+    
     #Creating Numpy Arrays for intermediate variables only
     (indices, exps, secret_deps, random_deps, nb_occs, weights, exps_str) = return_numpy_arrays(list_int_var)
 

@@ -80,26 +80,3 @@ def verification_probing(indices, weights, exps,  exps_str, secret_deps, random_
         list_tuples = np.asarray(list(itertools.islice(list_tuples_orig, 0, batch_size)))
         
     print("Gadget is " + str(t) + "-Probing Secure !\n")
-        
-        
-####################### No Batching Version #######################
-def verification_probing_(indices, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, t, verbosity):
-
-    nb_wires = len(exps)
-
-    val_max = (1<<nb_shares) - 1
-    
-    list_tuples = combs(indices, t)
-    
-    nb_occs_tuple = nb_occs[list_tuples]
-    sums = np.bitwise_or.reduce(weights[list_tuples], axis=1)
-    
-    #####################################  Apply Probing Rules (1, 2, 3 and 4)  #####################################
-    list_tuples, sums, nb_occs_tuple, secret_deps, l, time4, time3 = apply_all_rules(list_tuples, secret_deps, random_deps, exps, exps_str, nb_occs_tuple, sums, t, val_max, t = None, verbosity=verbosity)
-
-    secret_deps = secret_deps[:nb_wires, :]
-
-    if(len(list_tuples) > 0):
-        print("Gadget is NOT " + str(t) + "-Probing Secure !\n")
-    else:
-        print("Gadget is " + str(t) + "-Probing Secure !\n")
