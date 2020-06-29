@@ -105,7 +105,6 @@ The argument `-v` lets the user specify the amount of output he desires to follo
 
 * In the file __verification_rules.py__, there is a hamming weight lookup table, of default size 2048. This size means that the number of shares for any gadget is at most log<sub>2</sub>(2048) = 11 shares. If gadgets of higher number of shares are to be used with the program, the size of this table should be increased. Namely, for n-share gadgets, the table should be of size at least 2<sup>n</sup>. We consider the approach of the lookup table of size 2<sup>n</sup> since we use the tool to verify the security of relatively small gadgets, which makes the lookup table of reasonable size.
 
-  # changed to 2^n
 
 ## Input Format
 
