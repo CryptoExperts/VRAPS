@@ -1,1 +1,0 @@
-P.<a0,a1,a2,b0,b1,b2,r0_,r1_,r2_,r3_,r4_,r5_>=BooleanPolynomialRing()
