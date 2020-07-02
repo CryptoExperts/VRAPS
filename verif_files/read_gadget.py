@@ -45,7 +45,7 @@ import numpy as np
 #
 ##############################################################################
 
-def compute_input_file(circuit_file):
+def compute_input_file(circuit_file, verbosity):
     #result output circuit file after modification
     output_circuit = open("sage_tmp1.sage", "w")
     
@@ -56,21 +56,23 @@ def compute_input_file(circuit_file):
     lines = f1.readlines()
     f1.close()
     
-    #Copying first 5 files for ORDER, SHARES, IN, RANDOMS, OUT in the specified order
-    output_circuit.write(lines[0])  #ORDER    
-    output_circuit.write(lines[1])  #SHARES
-    nb_shares = int(lines[1].split()[1])
+    if("ORDER" in lines[0]):
+        lines = lines[1:]
     
-    output_circuit.write(lines[2])  #IN
+    #Copying first 5 files for ORDER, SHARES, IN, RANDOMS, OUT in the specified order
+    output_circuit.write(lines[0])  #SHARES  
+    nb_shares = int(lines[0].split()[1])
+    
+    output_circuit.write(lines[1])  #IN
     
     #Writing Sage_tmp2 File for polynomial Ring
-    varss = lines[2].split()[1:]
+    varss = lines[1].split()[1:]
     for v in varss:
         for i in range(nb_shares):
             output_pol_ring.write(v+str(i)+",")
     
     #RANDOMS with _
-    args = lines[3].split()
+    args = lines[2].split()
     output_circuit.write(args[0])
     randoms = []
     randoms_dict = dict()
@@ -90,15 +92,15 @@ def compute_input_file(circuit_file):
     tmp += 1
     output_circuit.write("\n")
     
-    output_circuit.write(lines[4])  #OUT
+    output_circuit.write(lines[3])  #OUT
     #Finishing file sage_tmp2
     output_pol_ring.write('>=BooleanPolynomialRing()')
     output_pol_ring.close()
     
-    output_letters = lines[4].split()[1:]
+    output_letters = lines[3].split()[1:]
     
     #Copying the rest of the file by writing unique instructions outputs
-    lines = lines[5:]
+    lines = lines[4:]
     used_out_vars = dict()
     new_lines = []
     #Variables _var counter
@@ -177,7 +179,9 @@ def compute_input_file(circuit_file):
         output_circuit.write(line)
 
     output_circuit.close()
-    print ("Succesfully Created sage_tmp1 and sage_tmp2 intermediate files !\n")
+    
+    if(verbosity > 0):
+        print ("Succesfully Created sage_tmp1 and sage_tmp2 intermediate files !\n")
     
     return generate_list_inv_var_from_file()
     
@@ -209,15 +213,14 @@ def generate_list_inv_var_from_file():
     f = open("sage_tmp1.sage")
     lines = f.readlines()
     f.close()
-    
-    order = int(lines[0].split()[1])    #ORDER
-    nb_shares = int(lines[1].split()[1])    #SHARES
+        
+    nb_shares = int(lines[0].split()[1])    #SHARES
     
     #Adding Input Variables
-    varss = lines[2].split()[1:]
+    varss = lines[1].split()[1:]
     for v in varss:
         list_secret_var.append(v)
-    rands = lines[3].split()[1:]
+    rands = lines[2].split()[1:]
     for r in rands:
         list_random_var.append(r)
         
@@ -244,9 +247,9 @@ def generate_list_inv_var_from_file():
         index += 1
         
     #Adding Output Variables
-    outs = lines[4].split()[1:]
+    outs = lines[3].split()[1:]
             
-    lines = lines[5:]
+    lines = lines[4:]
     Nadd = 0
     Nmult = 0
     #Updating intermediate variables wires

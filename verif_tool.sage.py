@@ -152,12 +152,15 @@ def main():
     if((args.Property in ["RPE", "RPC", "RP"]) and not(args.coeff_max)):
         parser.error("Value of c is required when property is " + str(args.Property))
         
-    load("verification_rules.py")
-    load("read_gadget.py")
+    verbosity = args.verbose
+    
+    folder = "./verif_files/"
+    load(folder+"verification_rules.py")
+    load(folder+"read_gadget.py")
     
     ####	Analysis of input file
     print ("Reading file...")
-    (order,nb_shares,list_int_var,list_out_var, complexity) = compute_input_file(args.File)
+    (order,nb_shares,list_int_var,list_out_var, complexity) = compute_input_file(args.File, verbosity)
     write_exps_file(list_int_var, list_out_var)
     
     #print(str(list_int_var))
@@ -178,7 +181,6 @@ def main():
         print("Error : t (=" + str(args.t) + ") >= nb_shares (=" + str(nb_shares) + ")")
         exit()
 
-    verbosity = args.verbose
     print("Gadget with " + str(len(secret_deps[_sage_const_0 ])) + " input(s),  " + str(len(list_out_var)) + " output(s),  " + str(nb_shares) + " share(s)")
     print ("Total number of intermediate variables : "+str(len(list_int_var)))
     print ("Total number of output variables : " + str(sum(_sage_const_1  for l in list_out_var)))
@@ -195,20 +197,25 @@ def main():
         
     #####################################  Case of Probing P #####################################
     if(args.Property == 'P'):
-		load("probing_func.py")
+		load(folder+"probing_func.py")
 		verification_probing(indices, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity)
 
     #####################################  End of Case of Probing P #####################################
 		
     #####################################  Case of Random Probing RP #####################################
     elif(args.Property == 'RP'):      
-        load("random_probing_func.py")
+        load(folder+"random_probing_func.py")
         
-        print ("----     Verification of Random Probing Security     ----")
+        if(verbosity == _sage_const_0 ):
+            print("Verifying Random Probing Security ...\n")
+        
+        if(verbosity > _sage_const_0 ):
+            print ("----     Verification of Random Probing Security     ----")
         start = time.time()
         coeff_c = verification_random_probing(indices, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, verbosity)
         end = time.time()
-        print("\n----     End of Verification of Random Probing Security     ----\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     End of Verification of Random Probing Security     ----\n")
         
         #Lower bound on f(p)
         var("p")
@@ -241,12 +248,18 @@ def main():
         del weights_o;   del exps_o;   del exps_str_o;   del secret_deps_o;   del random_deps_o;   del nb_occs_o
         
         total_time = _sage_const_0 
-        load("random_probing_comp_func.py") 
-        print("----     Verification of Random Probing Composability ( t = "+str(args.t)+" )    ----")
+        load(folder+"random_probing_comp_func.py") 
+        
+        if(verbosity == _sage_const_0 ):
+            print("Verifying Random Probing Composability ( t = " + str(args.t) + " ) ...\n")
+        
+        if(verbosity > _sage_const_0 ):
+            print("----     Verification of Random Probing Composability ( t = "+str(args.t)+" )    ----")
         start = time.time()
         out = verification_random_probing_comp(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, t_output = args.t_output)
         end = time.time()
-        print("\n----     End of Verification of Random Probing Composability     ----\n\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     End of Verification of Random Probing Composability     ----\n\n")
         total_time += (end-start)
 
         var("p")
@@ -296,20 +309,27 @@ def main():
         
         ##########################  Executing Verification Methods
         total_time = _sage_const_0 
-        load("random_probing_exp1_func.py") 
-        print("----     Verification of Random Probing Expandability Property 1 ( t = "+str(args.t)+" )    ----")
+        load(folder+"random_probing_exp1_func.py") 
+        if(verbosity == _sage_const_0 ):
+            print("Verifying Random Probing Expandability ( t = " + str(args.t) + " ) ...\n")
+        
+        if(verbosity > _sage_const_0 ):
+            print("----     Verification of Random Probing Expandability Property 1 ( t = "+str(args.t)+" )    ----")
         start = time.time()
         out1 = verification_random_probing_exp_1(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, t_output = args.t_output)
         end = time.time()
-        print("\n----     End of Verification of Random Probing Expandability Property 1     ----\n\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     End of Verification of Random Probing Expandability Property 1     ----\n\n")
         total_time += (end-start)
 
-        load("random_probing_exp2_func.py") 
-        print("----     Verification of Random Probing Expandability Property 2 ( t = "+str(args.t)+" )    ----")
+        load(folder+"random_probing_exp2_func.py") 
+        if(verbosity > _sage_const_0 ):
+            print("----     Verification of Random Probing Expandability Property 2 ( t = "+str(args.t)+" )    ----")
         start = time.time()
         out2 = verification_random_probing_exp_2(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity)
         end = time.time()
-        print("\n----     End of Verification of Random Probing Expandability Property 2     ----\n\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     End of Verification of Random Probing Expandability Property 2     ----\n\n")
         total_time += (end-start)
 
         var("p")
@@ -490,26 +510,35 @@ def main():
         ##########################  Executing Verification Method
         total_time = _sage_const_0 
         
-        load("random_probing_exp1_func.py") 
-        load("random_probing_exp2_func.py") 
-        load("random_probing_exp_copy_func.py") 
-        print("----     Verification of Random Probing Expandability Copy    ----\n")
+        load(folder+"random_probing_exp1_func.py") 
+        load(folder+"random_probing_exp2_func.py") 
+        load(folder+"random_probing_exp_copy_func.py") 
+        if(verbosity > _sage_const_0 ):
+            print("----     Verification of Random Probing Expandability Copy    ----\n")
         start = time.time()
         
-        print("\n----     Verification of EXP Copy 1    ----\n")
+        if(verbosity == _sage_const_0 ):
+            print("Verifying Random Probing Expandability ( t = " + str(args.t) + " ) ...\n")
+        
+        if(verbosity > _sage_const_0 ):
+            print("\n----     Verification of EXP Copy 1    ----\n")
         c1 = verification_random_probing_exp_1(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, copy = True)
         
-        print("\n----     Verification of EXP Copy 2    ----\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     Verification of EXP Copy 2    ----\n")
         c2 = verification_random_probing_exp_2(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, copy = True)
         
-        print("\n----     Verification of EXP Copy 12   ----\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     Verification of EXP Copy 12   ----\n")
         c12 = verification_random_probing_exp_copy_12(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, _sage_const_0 )
         
-        print("\n----     Verification of EXP Copy 21    ----\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     Verification of EXP Copy 21    ----\n")
         c21 = verification_random_probing_exp_copy_12(indices, indices_o, weights, exps,  exps_str, secret_deps, random_deps, nb_occs, coeff_max, nb_shares, args.t, verbosity, _sage_const_1 )
         end = time.time()
         
-        print("\n----     End of Verification of Random Probing Expandability Copy     ----\n\n")
+        if(verbosity > _sage_const_0 ):
+            print("\n----     End of Verification of Random Probing Expandability Copy     ----\n\n")
         total_time += (end-start)
         
         var("p")

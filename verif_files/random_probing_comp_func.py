@@ -175,10 +175,5 @@ def verification_random_probing_comp(indices, indices_o, weights, exps,  exps_st
                 
     #####################################  Done Iterating Over all combinations of output shares of size t  #####################################
     if(verbosity == 2):
-        print("Total update Time = " + str(upd))
-        print("\n\n")
-    print("\n\nRule 4 time = " + str(total_time))
-    print("\n\nRule 3 time = " + str(total_time3))
-    if(verbosity == 2):
         print("MAX coefficients c (|I1|>t) : " + str(coeff_c_max_I1_or_I2))
     return coeff_c_max_I1_or_I2
