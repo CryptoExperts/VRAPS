@@ -18,6 +18,9 @@ VRAPS was introduced in the following publication :
 This repository contains the code of __VRAPS__ implemented in SageMath and Python3:
 
 - **verif_tool.sage:** contains the main program that runs the tool.
+
+In **verif_files** folder:
+
 - **read_gadget.py:** contains the function that reads a gadget in an input file with the correct format, and outputs information needed for the tool to apply verification rules, converting variables and expressions in numpy arrays format (when the tool reads a gadget, it outputs three temporary files **sage_tmp1.sage**, **sage_tmp2.sage** and **sage_tmp2_exps.sage**).
 - **verification_rules.py:** contains the simplification rules (1, 2, 3 and 4), and the function that loops over all these rules and applies them to given tuples.
 - **probing_func.py:** contains the verification function for P property. 
