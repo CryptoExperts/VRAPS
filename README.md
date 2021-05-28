@@ -1,3 +1,5 @@
+test
+
 # VRAPS: (V)erifier of (RA)ndom (P)robing (S)ecurity
 
 VRAPS is a formal verification tool for the random probing security of masked implementations, as well as for the probing security. The verified properties are :
